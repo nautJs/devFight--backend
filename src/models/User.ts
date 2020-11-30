@@ -1,14 +1,12 @@
-import { v4 as uuid } from 'uuid';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('users')
 class User {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Column()
   github: string;
-
-  constructor({ github }: Omit<User, 'id'>) {
-    this.id = uuid();
-    this.github = github;
-  }
 }
 
 export default User;
