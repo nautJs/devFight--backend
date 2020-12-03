@@ -1,28 +1,13 @@
-import { isThisHour } from 'date-fns';
 import User from '../models/User';
+import { EntityRepository, Repository } from 'typeorm';
 
 interface CreateUserDTO{
   github: string;
 }
 
-class UsersRepository {
-  private users: User[];
-
-  constructor() {
-    this.users = [];
-  }
-
-  public all(): User[] {
-    return this.users;
-  }
-
-  public create({ github }: CreateUserDTO): User {
-    const user = new User({ github });
-
-    this.users.push(user);
-
-    return user;
-  }
+@EntityRepository(User)
+class UsersRepository extends Repository<User>{
+ 
 }
 
 export default UsersRepository;

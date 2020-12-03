@@ -1,21 +1,21 @@
 import User from '../models/User';
 import UsersRepository from '../repositories/UsersRepository';
+import { getCustomRepository } from 'typeorm';
+
 
 interface Request {
   github: string;
 }
 
 class CreateUserService {
-  private usersRepository: UsersRepository;
+  public async execute({ github }: Request): Promise<User> {
+    const usersRepository = getCustomRepository(UsersRepository);
 
-  constructor(usersRepository: UsersRepository) {
-    this.usersRepository = usersRepository;
-  }
-
-  public execute({ github }: Request): User {
-    const user = this.usersRepository.create({
+    const user = usersRepository.create({
       github,
     });
+
+    await usersRepository.save(user);
 
     return user;
   }

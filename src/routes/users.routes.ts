@@ -1,26 +1,26 @@
 import { Router } from 'express';
+import {getCustomRepository} from 'typeorm';
+import User from '../models/User';
 
 import UsersRepository from '../repositories/UsersRepository';
 import CreateUserService from '../services/CreateUserService';
 
 const usersRouter = Router();
-const usersRepository = new UsersRepository();
 
 usersRouter.get('/', (request, response) => {
-  const users = usersRepository.all();
+  const usersRepository = getCustomRepository(UsersRepository)
+  const users = usersRepository.find();
 
   return response.json(users);
 });
 
-usersRouter.post('/', (request, response) => {
+usersRouter.post('/', async (request, response) => {
   try {
     const { github } = request.body;
 
-    const createUser = new CreateUserService(
-      usersRepository,
-    );
+    const createUser = new CreateUserService();
 
-    const user = createUser.execute({
+    const user = await createUser.execute({
       github,
     });
 
